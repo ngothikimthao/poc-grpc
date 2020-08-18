@@ -22,6 +22,7 @@ window.onload = function () {
     if(name) {
       gRPCHello(name);
       gRPCStreamRespon(name);
+      document.getElementById("error-message").innerText = "";
     }
     else {
       document.getElementById("error-message").innerText = "Please enter your name!";
@@ -36,7 +37,6 @@ window.onload = function () {
     singleHelloRequest.setName(name);
   
     client.sayHello(singleHelloRequest, {}, (err, response) => {
-      console.log("response", response);
       if (err) {
         console.log(`Unexpected error for sayHello: code = ${err.code}` + `, message = "${err.message}"`);
       } else {

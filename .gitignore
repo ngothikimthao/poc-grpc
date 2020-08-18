@@ -4,6 +4,6 @@
 
 # file
 package-lock.json
-{*}web_pb.js
-{*}pb.js
+*/*web_pb.js
+*/*pb.js
 
