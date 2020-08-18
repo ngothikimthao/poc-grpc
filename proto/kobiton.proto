@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package kobiton_rpc;
+
+service KobitonRpc {
+  rpc StartVideoStream(StartVideoStreamRequest) returns (stream VideoFrame);
+  rpc SayHello(HelloRequest) returns (HelloReply) {};
+  rpc SayRepeatHello(RepeatHelloRequest) returns (stream HelloReply){};
+}
+
+message StartVideoStreamRequest {
+  // TODO: quality, fps...
+}
+
+message VideoFrame {
+  bytes data = 1;
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloReply {
+  string message = 1;
+}
+
+message RepeatHelloRequest {
+  string name = 1;
+  int32 count = 2;
+}
+

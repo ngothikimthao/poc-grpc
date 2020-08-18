@@ -1,0 +1,20 @@
+{
+  "name": "fake-master-hub",
+  "private": true,
+  "version": "1.0.0",
+  "author": "Kobiton Inc.",
+  "bin": "app.js",
+  "dependencies": {
+    "@grpc/grpc-js": "1.0.4",
+    "@grpc/proto-loader": "^0.5.4",
+    "async": "^3.2.0",
+    "express": "^4.17.1",
+    "google-protobuf": "^3.12.4",
+    "grpc-web": "^1.2.0",
+    "http2": "^3.3.7",
+    "webpack": "^4.44.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.12"
+  }
+}

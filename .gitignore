@@ -1,0 +1,9 @@
+# folder
+*/node_modules/
+*/target/
+
+# file
+package-lock.json
+{*}web_pb.js
+{*}pb.js
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fake portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-4">
+          <h2>Demo Request</h2>
+          <form id="formHello" name="formHello" >
+            <label for="fname">Enter your name:</label><br><br>
+            <input class="form-control mb-2 mr-sm-2" type="text" id="name" name="name"><br>
+            <p id="error-message" style="color: red"></p>
+            <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
+          </form>
+          <br>
+          <div class="row" style="border: 1px solid gray">
+            <div class="hello col-md-6" id="hello">
+              <h4>Single Response</h4>
+            </div>
+            <div class="hello-repeat col-md-6" id="hello-repeat" style="border-left: 1px solid gray">
+              <h4>Stream Response</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <h2>Demo Video Stream</h2>
+          <video
+          autoplay
+          muted
+          style="
+            width: 360px;
+            height: 640px;
+            border: solid 1px;
+            display: block;
+            margin: 50px auto;
+          "
+          >
+          </video>
+        </div> 
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="./dist/main.js"></script>
+  <html></html>
+</html>
