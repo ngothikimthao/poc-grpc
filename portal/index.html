@@ -6,44 +6,56 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+      #error {
+        background-color: #ffb3b3;
+        color: white;
+      }
+      #success {
+        background-color: #4CAF50;
+        color: white;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
       <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-4">
-          <h2>Demo Request</h2>
+        <h2 class="col-md-12">The POC connects GRPC to your office network</h2>
+        <div class="col-md-6">
+          <h4>1. Click the connect button below and wait a minute</h4>
           <form id="formHello" name="formHello" >
-            <label for="fname">Enter your name:</label><br><br>
-            <input class="form-control mb-2 mr-sm-2" type="text" id="name" name="name"><br>
-            <p id="error-message" style="color: red"></p>
-            <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
+            <button type="submit" value="Submit" class="btn btn-primary">Connect</button>
           </form>
           <br>
-          <div class="row" style="border: 1px solid gray">
-            <div class="hello col-md-6" id="hello">
-              <h4>Single Response</h4>
-            </div>
-            <div class="hello-repeat col-md-6" id="hello-repeat" style="border-left: 1px solid gray">
-              <h4>Stream Response</h4>
-            </div>
+          <h4>2. Verify the result </h4>
+          <h5>If your network can not connect, it will display an error message.</h5>
+          <h5>If your network connects successfully, it will display the success message and the video on the left windown.</h5>
+          <h5>Please take a screen shot for your POC.</h5>
+          <br>
+          <div id="error">
+            <div id="error"></div>
+            <div id="error-message"></div>
           </div>
+          <div id="success">
+            <div id="success"></div>
+            <div id="success-message"></div>
+          </div>
+          <br><br>
         </div>
-        <div class="col-md-4">
-          <h2>Demo Video Stream</h2>
+        <div class="col-md-6">
           <video
+          id="videoStream"
           autoplay
           muted
           style="
             width: 360px;
             height: 640px;
-            border: solid 1px;
-            display: block;
-            margin: 50px auto;
+            display: none;
+            margin: 20px auto;
           "
           >
           </video>
-        </div> 
+        </div>
       </div>
     </div>
   </body>

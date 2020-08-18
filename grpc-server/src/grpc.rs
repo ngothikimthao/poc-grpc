@@ -9,7 +9,7 @@ use tokio::time::delay_for;
 use tokio_util::codec::LengthDelimitedCodec;
 
 use tonic::{transport::Server, Request, Response, Status};
-use kobiton_rpc::{HelloRequest, HelloReply, RepeatHelloRequest};
+use kobiton_rpc::{HelloRequest, HelloReply};
 use kobiton_rpc::kobiton_rpc_server::KobitonRpc;
 
 
@@ -39,30 +39,11 @@ impl KobitonRpc for KobitonRpcImpl {
         Ok(Response::new(data_rx))
     }
 
-    async fn say_hello(&self, request:Request<HelloRequest>) -> Result<Response<HelloReply>, Status>{
+    async fn say_hello(&self, _request:Request<HelloRequest>) -> Result<Response<HelloReply>, Status>{
         Ok(Response::new(HelloReply {
-          // reading data from request which is awrapper around our SayRequest message defined in .proto
-          message:format!("Hello {}", request.get_ref().name),
+          message:format!("Your netwwork has been successfully connected!"),
         }))
-    }
-    
-    type SayRepeatHelloStream = mpsc::Receiver<Result<HelloReply,Status>>;
-    async fn say_repeat_hello(&self, request: Request<RepeatHelloRequest>,) -> Result<Response<Self::SayRepeatHelloStream>, Status> {
-        let (mut tx, rx) = mpsc::channel(4);
-          // creating a new task
-          tokio::spawn(async move {
-            // looping and sending our response using stream
-            for _ in 0..4{
-                // sending response to our channel
-                //   tx.send(Ok(HelloReply {message: format!("Repeat Hello {}", request.get_ref().name),})).await;
-                if let Err(e) = tx.send(Ok(HelloReply {message: format!("Repeat Hello {}", request.get_ref().name),})).await{
-                    error!("Say hello repeat failed. Error: {:?}", e);
-                }
-            }
-          });
-        // returning our reciever so that tonic can listen on reciever and send the response to client
-        Ok(Response::new(rx))
-    }    
+    }  
 }
 
 async fn stream_video(mut data_tx: mpsc::Sender<Result<kobiton_rpc::VideoFrame, tonic::Status>>) -> Result<(), KobitonError> {

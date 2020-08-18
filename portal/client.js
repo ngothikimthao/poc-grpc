@@ -18,97 +18,21 @@ window.onload = function () {
 
   const form = document.getElementById("formHello");
   form.addEventListener("submit", e => {
-    const name = e.target.name.value;
-    if(name) {
-      gRPCHello(name);
-      gRPCStreamRespon(name);
-      document.getElementById("error-message").innerText = "";
-    }
-    else {
-      document.getElementById("error-message").innerText = "Please enter your name!";
-    }
-    e.preventDefault();
-  })
+    var singleHelloRequest = new HelloRequest();   
 
-  // GRPC hello
-  const gRPCHello = (name) => {
-    var node = document.createElement("ul");
-    var singleHelloRequest = new HelloRequest();
-    singleHelloRequest.setName(name);
-  
     client.sayHello(singleHelloRequest, {}, (err, response) => {
       if (err) {
-        console.log(`Unexpected error for sayHello: code = ${err.code}` + `, message = "${err.message}"`);
+        document.getElementById("error").style.padding = "10px";
+        document.getElementById("success-message").innerText = "";
+        document.getElementById("error-message").innerText = `Error message: ${err.message}`;
+          console.log(`Unexpected error for sayHello: code = ${err.code}` + `, message = "${err.message}"`);
       } else {
-        var nodeChild = document.createElement("li");
-        var textnode = document.createTextNode(response.getMessage());
-        nodeChild.appendChild(textnode);
-        node.appendChild(nodeChild);
+        document.getElementById("success").style.padding = "10px";
+        document.getElementById("success-message").innerText = "Success message: " + response.getMessage();
+        document.getElementById("error-message").innerText = "";
         console.log(response.getMessage());
       }
-      document.getElementById("hello").appendChild(node);
     });
-  }
-
-  // GRPC stream response
-  const gRPCStreamRespon = (name) => {
-    var node = document.createElement("ul");
-
-    var streamHelloRequest = new RepeatHelloRequest();
-    streamHelloRequest.setName(name);
-    streamHelloRequest.setCount(5);
-  
-    var streamHello = client.sayRepeatHello(streamHelloRequest);
-    streamHello.on('data', (response) => {
-      var nodeChild = document.createElement("li");
-      var textnode = document.createTextNode(response.getMessage());
-      nodeChild.appendChild(textnode)
-      node.appendChild(nodeChild);
-      console.log(response.getMessage());
-    });
-    document.getElementById("hello-repeat").appendChild(node);
-    streamHello.on('error', (err) => {
-      console.log(`Unexpected stream error: code = ${err.code}` + `, message = "${err.message}"`);
-    });
-  }
-
-  // Media source & video
-  var mediaSource = new MediaSource();
-  console.log("mediaSource.readyState", mediaSource.readyState);
-  mediaSource.addEventListener("sourceopen", function () {
-    console.log("mediaSource.readyState", mediaSource.readyState);
-    sourceBuffer = mediaSource.addSourceBuffer(MIME_CODEC);
-    isMediaSourceReady = true;
-  });
-
-  var video = document.querySelector("video");
-  video.addEventListener("loadedmetadata", function () {
-    if (video.readyState > 0) {
-      video.play();
-      console.log("Video play");
-
-      video.onplay = () => {
-        if (video.buffered.length > 0) {
-          const bufferedTime = video.buffered.end(video.buffered.length - 1);
-          const currentTime = video.currentTime;
-          if (currentTime < bufferedTime) {
-            video.currentTime = bufferedTime;
-          }
-        }
-      };
-    }
-  });
-
-  video.addEventListener("timeupdate", function () {
-    if (video.buffered.length > 0) {
-      const bufferedTime = video.buffered.end(video.buffered.length - 1);
-      const currentTime = video.currentTime;
-      if (currentTime < bufferedTime) {
-        video.currentTime = bufferedTime;
-      }
-    }
-  });
-  video.src = URL.createObjectURL(mediaSource);
 
   // GRPC streaming
   var request = new StartVideoStreamRequest();
@@ -116,7 +40,7 @@ window.onload = function () {
 
   // Read data
   stream.on('data', function(data) {
-    // console.log('>>> received', data.getData())
+    document.getElementById("videoStream").style.display="block";
     var rawBytes = data.getData();
 
     if (nFrames == 0) {
@@ -157,13 +81,59 @@ window.onload = function () {
       }
     }
   });
+
   stream.on('status', function(status) {
     console.log('[grpc] status', status);
   });
   stream.on('error', function(error) {
+    document.getElementById("videoStream").style.display="none";
     console.log('[grpc] error', error);
   });
   stream.on('end', function() {
     console.log('[grpc] end');
   });
+
+    e.preventDefault();
+  })
+
+  // Media source & video
+  var mediaSource = new MediaSource();
+  console.log("mediaSource.readyState", mediaSource.readyState);
+  mediaSource.addEventListener("sourceopen", function () {
+    console.log("mediaSource.readyState", mediaSource.readyState);
+    sourceBuffer = mediaSource.addSourceBuffer(MIME_CODEC);
+    isMediaSourceReady = true;
+  });
+
+  var video = document.querySelector("video");
+  video.addEventListener("loadedmetadata", function () {
+    if (video.readyState > 0) {
+      video.play();
+      console.log("Video play");
+
+      video.onplay = () => {
+        if (video.buffered.length > 0) {
+          const bufferedTime = video.buffered.end(video.buffered.length - 1);
+          const currentTime = video.currentTime;
+          if (currentTime < bufferedTime) {
+            video.currentTime = bufferedTime;
+          }
+        }
+      };
+    }
+  });
+
+  video.addEventListener("timeupdate", function () {
+    if (video.buffered.length > 0) {
+      const bufferedTime = video.buffered.end(video.buffered.length - 1);
+      const currentTime = video.currentTime;
+      if (currentTime < bufferedTime) {
+        video.currentTime = bufferedTime;
+      }
+    }
+  });
+  video.src = URL.createObjectURL(mediaSource);
+
+
 };
+
